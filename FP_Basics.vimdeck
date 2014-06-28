@@ -1,0 +1,62 @@
+                |\  |----|
+                | \ |    |
+                |  \|    |
+                |   |    |
+                |   |\   |
+                |   | \  |
+                |   |  \ |
+                |   |   \|
+                |   |    \
+                |   |    |\
+                |   |    | \
+                |   |    | /
+                |   |    |/
+                |   |    /
+                |   |   /|
+                |   |  / |
+                |   | /  |
+                |   |/   |
+                |   |    |
+                |  /|    |
+                | / |    |
+                |/  |----|
+
+# FP in JS
+#- Grundlagen -
+## von Christian Hörauf
+## @ Insert Effect
+
+
+#First Class Functions
+
+
+#Higher Order Functions
+  - Functions get functions as parameters
+  - Functions can return functions
+
+
+#Iterables
+  - each
+  - map
+  - filter
+  - reduce
+
+
+#Closures
+  - Counter beispiel
+  - Real Privacy in JS
+
+
+#Curring vs Partial Applicaiton
+ - DRY by Partial application
+
+
+#Funktionen mit Funktionen konfigurieren
+
+
+#Composition
+  - vs Inheritance
+  - Sort Example from "Functional JavaScript"
+
+
+#Thank you
