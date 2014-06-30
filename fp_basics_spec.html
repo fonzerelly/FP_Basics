@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>FP-Basics</title>
+
+  <link rel="shortcut icon" type="image/png" href="lib/jasmine-2.0.0/jasmine_favicon.png">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/1.3.1/jasmine.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/1.3.1/jasmine.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/1.3.1/jasmine-html.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
+
+  <!-- Write Functions to test here -->
+  <script type="text/javascript">
+  </script>
+
+  <!-- Write specs here -->
+  <script type="text/javascript">
+
+	describe("Functions are first class objects", function () {
+		it ("should be possible to pass functions around", function () {
+			var my_func = function() {}
+			var a_reference = my_func;
+			expect(a_reference).toBe(my_func);
+		});
+	});
+
+	describe("Higher order functions", function () {
+		it ("should be possible to pass functions as argument to other functions", function () {
+			var my_func = function () {}
+			var take_my_func = function (func) {
+				expect(func).toBe(my_func);
+			}
+			take_my_func(my_func);
+		});
+		it ("should be possible to return functions from a function", function () {
+			var return_a_func = function () {
+				return function () {};
+			}
+			expect(return_a_func() instanceof Function).toEqual(true);
+		});
+	});
+
+
+  </script>
+
+  <!-- Startup Code for Jasmine -->
+  <script type="text/javascript">
+    (function() {
+      var jasmineEnv = jasmine.getEnv();
+      jasmineEnv.updateInterval = 1000;
+
+      var htmlReporter = new jasmine.HtmlReporter();
+
+      jasmineEnv.addReporter(htmlReporter);
+
+      jasmineEnv.specFilter = function(spec) {
+        return htmlReporter.specFilter(spec);
+      };
+
+      var currentWindowOnload = window.onload;
+
+      window.onload = function() {
+        if (currentWindowOnload) {
+          currentWindowOnload();
+        }
+        execJasmine();
+      };
+
+      function execJasmine() {
+        jasmineEnv.execute();
+      }
+
+    })();
+  </script>
+
+</head>
+
+<body>
+</body>
+</html>
