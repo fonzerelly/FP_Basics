@@ -87,6 +87,27 @@
 		});
 	});
 
+	describe ("closures", function () {
+		var createCounter = function () {
+			var counter = 0;
+			return function () {
+				return counter += 1;
+			};
+		};
+		it ("should hide its state in its function scope", function () {
+			var count = createCounter();
+			expect(count.counter).toEqual(undefined);
+			expect(count()).toEqual(1);
+			expect(count()).toEqual(2);
+		});
+		it ("should create its own state for each call", function () {
+			var count1 = createCounter();
+			expect(count1()).toEqual(1);
+			var count2 = createCounter();
+			expect(count2()).toEqual(1);
+		});
+	});
+
   </script>
 
   <!-- Startup Code for Jasmine -->
