@@ -41,6 +41,51 @@
 		});
 	});
 
+	describe ("_.each", function () {
+		it ("should iterate each element of a list", function () {
+			var iterable = [1, 2, 3];
+			var result = [];
+			_.each(iterable, function (value) {
+				result.push(value);
+			});
+			expect(iterable).toEqual(result);
+		});
+	});
+
+	describe ("_.map", function () {
+		it ("should convert each element of a list", function () {
+			var iterable = [1, 2, 3];
+			var result = _.map(iterable, function (value) {
+				return value * value;
+			});
+			expect(result).toEqual([1,4,9]);
+		});
+	});
+
+	describe ("_.filter", function () {
+		it ("should select only elements that fullfill a boolean criteria", function () {
+			var iterable = [1, 2, 3, 4];
+			var result = _.filter(iterable, function (value) {
+				return (value % 2) === 0;
+			});
+			expect(result).toEqual([2,4]);
+		});
+	});
+
+
+	describe ("_.reduce", function () {
+		it ("should combine each two elements of a list to some result", function () {
+			var iterable = [1, 2, 3, 4];
+			var result = _.reduce(
+				iterable,
+				function (previous_result, value) {
+					return previous_result + value;
+				},
+				0
+			);
+			expect(result).toEqual(1 + 2 + 3 + 4);
+		});
+	});
 
   </script>
 
