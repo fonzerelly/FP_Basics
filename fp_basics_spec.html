@@ -16,135 +16,214 @@
 
   <!-- Write specs here -->
   <script type="text/javascript">
+//#First Class Functions
 
-	describe("Functions are first class objects", function () {
-		it ("should be possible to pass functions around", function () {
-			var my_func = function() {}
-			var a_reference = my_func;
-			expect(a_reference).toBe(my_func);
-		});
-	});
+//```javascript
+    describe("Functions are First Class Objects", function () {
 
-	describe("Higher order functions", function () {
-		it ("should be possible to pass functions as argument to other functions", function () {
-			var my_func = function () {}
-			var take_my_func = function (func) {
-				expect(func).toBe(my_func);
-			}
-			take_my_func(my_func);
-		});
-		it ("should be possible to return functions from a function", function () {
-			var return_a_func = function () {
-				return function () {};
-			}
-			expect(return_a_func() instanceof Function).toEqual(true);
-		});
-	});
+        it ("can be passed around, just like values", function () {
+            var my_func = function() {}
+            var a_reference = my_func;
+            expect(a_reference).toBe(my_func);
+        });
 
-	describe ("_.each", function () {
-		it ("should iterate each element of a list", function () {
-			var iterable = [1, 2, 3];
-			var result = [];
-			_.each(iterable, function (value) {
-				result.push(value);
-			});
-			expect(iterable).toEqual(result);
-		});
-	});
-
-	describe ("_.map", function () {
-		it ("should convert each element of a list", function () {
-			var iterable = [1, 2, 3];
-			var result = _.map(iterable, function (value) {
-				return value * value;
-			});
-			expect(result).toEqual([1,4,9]);
-		});
-	});
-
-	describe ("_.filter", function () {
-		it ("should select only elements that fullfill a boolean criteria", function () {
-			var iterable = [1, 2, 3, 4];
-			var result = _.filter(iterable, function (value) {
-				return (value % 2) === 0;
-			});
-			expect(result).toEqual([2,4]);
-		});
-	});
+    });
+//```
 
 
-	describe ("_.reduce", function () {
-		it ("should combine each two elements of a list to some result", function () {
-			var iterable = [1, 2, 3, 4];
-			var result = _.reduce(
-				iterable,
-				function (previous_result, value) {
-					return previous_result + value;
-				},
-				0
-			);
-			expect(result).toEqual(1 + 2 + 3 + 4);
-		});
-	});
+//#Higher Order Functions
 
-	describe ("closures", function () {
-		var createCounter = function () {
-			var counter = 0;
-			return function () {
-				return counter += 1;
-			};
-		};
-		it ("should hide its state in its function scope", function () {
-			var count = createCounter();
-			expect(count.counter).toEqual(undefined);
-			expect(count()).toEqual(1);
-			expect(count()).toEqual(2);
-		});
-		it ("should create its own state for each call", function () {
-			var count1 = createCounter();
-			expect(count1()).toEqual(1);
-			var count2 = createCounter();
-			expect(count2()).toEqual(1);
-		});
-	});
+//```javascript
+    describe("Higher Order Function", function () {
 
-	describe ("currying vs partial application", function () {
-		var add = function (a, b, c) {
-			return a + b + c;
-		};
+        it ("can get functions as argument", function () {
+            var my_func = function () {}
+            var take_my_func = function (func) {
+                expect(func instanceof Function).toEqual(true);
+            }
+            take_my_func(my_func);
+        });
 
-		it ("should convert a function with n parameter into n functions for each parameter", function () {
-			var curried_add = _.curry(add);
-			expect(curried_add instanceof Function).toEqual(true);
-			expect(curried_add(1) instanceof Function).toEqual(true);
-			expect(curried_add(1)(2) instanceof Function).toEqual(true);
-			expect(curried_add(1)(2)(3)).toEqual(6);
-		});
+        it ("can return a function", function () {
+            var return_a_func = function () {
+                return function () {};
+            }
+            expect(return_a_func() instanceof Function).toEqual(true);
+        });
 
-		it ("should store values for parameters", function () {
-			var applied_add = _.partial(add, 1, 2, 3);
-			expect(applied_add instanceof Function).toEqual(true);
-			expect(applied_add()).toEqual(6);
-		});
-	});
+    });
+//```
 
-	describe ("composition", function () {
-		var extract_value = function (obj) {
-			return obj.value;
-		}
-		var add_5 = function (value) {
-			return value + 5;
-		}
 
-		it("should create a function from several functions", function () {
-			var an_obj = {
-				value: 42,
-				sum: 21
-				};
-			expect(_.compose(add_5, extract_value)(an_obj)).toEqual(add_5(extract_value(an_obj)));
-		});
-	});
+//#Iterables in FP
+//##forEach
 
+//```javascript
+    describe ("_.forEach", function () {
+        it ("should iterate each element of a list", function () {
+            var iterable = [1, 2, 3];
+            var result = [];
+            _.forEach(iterable, function handle(value) {
+                result.push(value);
+            });
+
+            expect(iterable).toEqual(result);
+        });
+    });
+//```
+
+
+//#Iterables in FP
+//##map
+
+//```javascript
+    describe ("_.map", function () {
+        it ("should map each element of a list onto a new list", function () {
+            var iterable = [1, 2, 3];
+            var result = _.map(iterable, function square(value) {
+                return value * value;
+            });
+
+            expect(result).toEqual([1,4,9]);
+        });
+    });
+//```
+
+
+//#Iterables in FP
+//##filter
+
+//```javascript
+    describe ("_.filter", function () {
+        it ("should filter only elements that fullfill a boolean criteria", function () {
+            var iterable = [1, 2, 3, 4];
+            var result = _.filter(iterable, function is_even(value) {
+                return (value % 2) === 0;
+            });
+
+            expect(result).toEqual([2,4]);
+        });
+    });
+//```
+
+
+//#Iterables in FP
+//##reduce
+
+//```javascript
+    describe ("_.reduce", function () {
+
+        it ("should combine each two elements of a list to some result", function () {
+            var iterable = [1, 2, 3, 4];
+            var result = _.reduce(
+                iterable,
+                function sum_up (previous_result, value) {
+                    return previous_result + value;
+                },
+                0
+            );
+
+            expect(result).toEqual(1 + 2 + 3 + 4);
+        });
+
+    });
+//```
+
+
+//#Closures
+
+//```javascript
+    describe ("Closures", function () {
+
+        var createCounterClosure = function () {
+            var counter = 0;
+
+            return function () {
+                return counter += 1;
+            };
+        };
+
+        it ("should hide its state in its function scope", function () {
+            var count = createCounterClosure();
+
+            expect(count.counter).toEqual(undefined);
+
+            expect(count()).toEqual(1);
+            expect(count()).toEqual(2);
+        });
+
+        it ("should create its own state for each call", function () {
+            var count1 = createCounterClosure();
+
+            expect(count1()).toEqual(1);
+
+            var count2 = createCounterClosure();
+
+            expect(count2()).toEqual(1);
+        });
+
+    });
+//```
+
+
+//#Curring
+
+//```javascript
+    describe ("Currying", function () {
+
+        var add = function (a, b, c) {
+            return a + b + c;
+        };
+
+        it ("should convert a function with n parameter into n functions for each parameter", function () {
+            var curried_add = _.curry(add);
+
+            expect(curried_add instanceof Function).toEqual(true);
+            expect(curried_add(1) instanceof Function).toEqual(true);
+            expect(curried_add(1)(2) instanceof Function).toEqual(true);
+            expect(curried_add(1)(2)(3)).toEqual(6);
+        });
+    });
+//```
+
+
+//#Partial Application
+
+//```javascript
+    describe ("Partial Application", function () {
+        var add = function (a, b, c) {
+            return a + b + c;
+        };
+        it ("should store values for parameters", function () {
+            var applied_add = _.partial(add, 1, 2, 3);
+
+            expect(applied_add instanceof Function).toEqual(true);
+            expect(applied_add()).toEqual(6);
+        });
+    });
+//```
+
+
+//#Composition
+
+//```javascript
+    describe ("composition", function () {
+        var extract_value = function (obj) {
+            return obj.value;
+        }
+        var add_5 = function (value) {
+            return value + 5;
+        }
+
+        it("composes a function out of several functions", function () {
+            var an_obj = {
+                value: 42,
+                sum: 21
+                };
+            expect(_.compose(add_5, extract_value)(an_obj)).toEqual(add_5(extract_value(an_obj)));
+        });
+    });
+//```
   </script>
 
   <!-- Startup Code for Jasmine -->

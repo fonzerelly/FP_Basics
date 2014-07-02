@@ -21,42 +21,250 @@
                 | / |    |
                 |/  |----|
 
-# FP in JS
-#- Grundlagen -
-## von Christian Hörauf
-## @ Insert Effect
+#FP Grundlagen in JS
+
+Christian Hörauf @ Insert Effect
+
+
+#Funktionale Progammierung
+
+  - Klassische Programmiersprachen orientieren sich an Computer
+  - Funktionale Programmiersprachen orientieren sich am Programmierer
+  - OOP -> Denken in Nomen
+  - FP -> Denken in Verben
+  - Moor`s Law wird nur durch die Vermehrung von Prozessoren am Leben erhalten
+
+
+#Motivation
+
+  - Lesbarerer Code
+  - Einfacheres Testing
+  - Einfachere Codewiederverwertung
+  - Einfacherer Multithreading Support
+
+
+#Grundlagen
+
+  - First Class Functions
+  - Higher Order Functions
+  - Iterables in FP
+  - Closures
+  - Currying / Partial Application
 
 
 #First Class Functions
 
+```javascript
+    describe("Functions are First Class Objects", function () {
+
+        it ("can be passed around, just like values", function () {
+            var my_func = function() {}
+            var a_reference = my_func;
+            expect(a_reference).toBe(my_func);
+        });
+
+    });
+```
+
 
 #Higher Order Functions
-  - Functions get functions as parameters
-  - Functions can return functions
+
+```javascript
+    describe("Higher Order Function", function () {
+
+        it ("can get functions as argument", function () {
+            var my_func = function () {}
+            var take_my_func = function (func) {
+                expect(func instanceof Function).toEqual(true);
+            }
+            take_my_func(my_func);
+        });
+
+        it ("can return a function", function () {
+            var return_a_func = function () {
+                return function () {};
+            }
+            expect(return_a_func() instanceof Function).toEqual(true);
+        });
+
+    });
+```
 
 
-#Iterables
-  - each
-  - map
-  - filter
-  - reduce
+#Iterables in FP
+##forEach
+
+```javascript
+    describe ("_.forEach", function () {
+        it ("should iterate each element of a list", function () {
+            var iterable = [1, 2, 3];
+            var result = [];
+            _.forEach(iterable, function handle(value) {
+                result.push(value);
+            });
+
+            expect(iterable).toEqual(result);
+        });
+    });
+```
+
+
+#Iterables in FP
+##map
+
+```javascript
+    describe ("_.map", function () {
+        it ("should map each element of a list onto a new list", function () {
+            var iterable = [1, 2, 3];
+            var result = _.map(iterable, function square(value) {
+                return value * value;
+            });
+
+            expect(result).toEqual([1,4,9]);
+        });
+    });
+```
+
+
+#Iterables in FP
+##filter
+
+```javascript
+    describe ("_.filter", function () {
+        it ("should filter only elements that fullfill a boolean criteria", function () {
+            var iterable = [1, 2, 3, 4];
+            var result = _.filter(iterable, function is_even(value) {
+                return (value % 2) === 0;
+            });
+
+            expect(result).toEqual([2,4]);
+        });
+    });
+```
+
+
+#Iterables in FP
+##reduce
+
+```javascript
+    describe ("_.reduce", function () {
+
+        it ("should combine each two elements of a list to some result", function () {
+            var iterable = [1, 2, 3, 4];
+            var result = _.reduce(
+                iterable,
+                function sum_up (previous_result, value) {
+                    return previous_result + value;
+                },
+                0
+            );
+
+            expect(result).toEqual(1 + 2 + 3 + 4);
+        });
+
+    });
+```
 
 
 #Closures
-  - Counter beispiel
-  - Real Privacy in JS
+
+```javascript
+    describe ("Closures", function () {
+
+        var createCounterClosure = function () {
+            var counter = 0;
+
+            return function () {
+                return counter += 1;
+            };
+        };
+
+        it ("should hide its state in its function scope", function () {
+            var count = createCounterClosure();
+
+            expect(count.counter).toEqual(undefined);
+
+            expect(count()).toEqual(1);
+            expect(count()).toEqual(2);
+        });
+
+        it ("should create its own state for each call", function () {
+            var count1 = createCounterClosure();
+
+            expect(count1()).toEqual(1);
+
+            var count2 = createCounterClosure();
+
+            expect(count2()).toEqual(1);
+        });
+
+    });
+```
 
 
-#Curring vs Partial Applicaiton
- - DRY by Partial application
+#Curring
+
+```javascript
+    describe ("Currying", function () {
+
+        var add = function (a, b, c) {
+            return a + b + c;
+        };
+
+        it ("should convert a function with n parameter into n functions for each parameter", function () {
+            var curried_add = _.curry(add);
+
+            expect(curried_add instanceof Function).toEqual(true);
+            expect(curried_add(1) instanceof Function).toEqual(true);
+            expect(curried_add(1)(2) instanceof Function).toEqual(true);
+            expect(curried_add(1)(2)(3)).toEqual(6);
+        });
+    });
+```
 
 
-#Funktionen mit Funktionen konfigurieren
+#Partial Application
+
+```javascript
+    describe ("Partial Application", function () {
+        var add = function (a, b, c) {
+            return a + b + c;
+        };
+        it ("should store values for parameters", function () {
+            var applied_add = _.partial(add, 1, 2, 3);
+
+            expect(applied_add instanceof Function).toEqual(true);
+            expect(applied_add()).toEqual(6);
+        });
+    });
+```
 
 
 #Composition
-  - vs Inheritance
-  - Sort Example from "Functional JavaScript"
+
+```javascript
+    describe ("composition", function () {
+        var extract_value = function (obj) {
+            return obj.value;
+        }
+        var add_5 = function (value) {
+            return value + 5;
+        }
+
+        it("composes a function out of several functions", function () {
+            var an_obj = {
+                value: 42,
+                sum: 21
+                };
+            expect(_.compose(add_5, extract_value)(an_obj)).toEqual(add_5(extract_value(an_obj)));
+        });
+    });
+```
 
 
-#Thank you
+#Noch offen
+  - Lazyness
+  - Immutable Data Structures
+  - Monads
+  - ...
+
