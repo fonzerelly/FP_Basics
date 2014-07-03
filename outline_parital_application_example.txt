@@ -1,0 +1,75 @@
+//Sagen wir, ich hab eine Konsolenanwendung, die
+// -eine CSV-Datei verarbeitet
+// -die Matrix in irgend einer art umformt
+// -und die neue Matrix rausschreibt
+
+//Dabei wollen wir die Zeile mit dem gleichen Trennzeichen rausschreiben, die
+//in dem Eingabefile verwendet wurden...
+
+//Wir haben eine beliebig komplexe Funktion, die auf den Puffer zugreift und
+//daraus das Trennzeichen ermittelt
+
+function extract_seperator(buffer, and_a_lot_other_complex_params) {
+	if (!buffer) {
+		throw "Does not work without buffer";
+	}
+	if (!and_a_lot_other_complex_params) {
+		throw "Does not work without any of those complex parameters";
+	}
+	return ",";
+}
+
+//So irgendwo am Ende des Programms müssen wir folgende Funktion aufrufen:
+
+var columns= ["col1", "col2", "col3"];
+
+function write_csv_line(seperator, colums) {
+	return columns.join(seperator);
+}
+
+
+// Aber wo krieg ich am Ende des Programms meinen seperator her?
+// ich könnte ihn global ablegen
+
+var seperator = extract_seperator(buffer);
+
+//Calculate the columns somehow and call
+write_csv_line(seperator, columns);
+
+//Aber Global is immer igitigitt!
+//Was könnte man noch tun? Vielleicht extract_seperator am ende zusammen mit
+//write_csv_line aufrufen...
+
+var buffer = buffer;
+
+
+//Calculate the columns somehow and call
+write_csv_line(extract_seperator(buffer));
+
+//Aber dann muss ich den buffer und die vielen anderen Variablen immer
+//mit schleppen... . Das bringt also auch nix.
+
+//Vielleicht muss ich write_csv noch ein bisschen tweaken:
+
+function write_csv_line(seperator, columns) {
+	return columns.join(seperator());
+}
+
+//Was hab ich jetzt anders gemacht?
+
+write_csv_line(lo.constant(","), columns) {
+
+//Ich erwarte jetzt ne Funktion die mir den seperator zurück gibt anstatt den
+//seperator direkt zu übergeben. Was soll das denn?!?
+
+
+//Ach so, jetzt kann ich die parameter dort wo iche sie gerde zur Verfügung
+//habe der extract_seperator mitgeben...
+
+extract_seperator = lo.partial(extract_seperator, buffer, some_other_params);
+
+//Und jetzt kann ich write_csv_line einfach mit der funktion selbst füttern...
+write_csv_line(extract_seperator, columns);
+
+
+
